@@ -25,12 +25,18 @@ printf '	#CPU Load: %.2f%%\n' ""
 
 printf '	#Last Boot: %s\n' "$(who -b | grep -Po "boot *\K.*")"
 
-printf '	#LVM Use: %s\n' ""
+if [ "$(lsblk | grep -c lvm)" = "0" ]; then
+	printf '	#LVM Use: No\n' ""
+else
+	printf '        #LVM Use: Yes\n' ""
+fi
 
 printf '	#Connections TCP: %i ESTABLISHED\n' ""
 
 printf '	#User Log: %i\n' ""
 
+# ip link
+# ip maddress
 printf '	#Network: IP %s\n' ""
 
 printf '	#Sudo: %i cmd\n' ""
