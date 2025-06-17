@@ -7,15 +7,23 @@ printf '	#CPU physical: %i\n' "$p_cores"
 
 printf '	#vCPU: %i\n' "$(nproc)"
 
-printf '	#Memory Usage: \n' ""
+total_mem=$(free --mega | grep -Po "Mem: *\K\d*")
+in_use_mem=$(free --mega | grep -Po "Mem: *\d* *\K\d*")
+printf '	#Memory Usage: %i' "$in_use_mem"
+printf '/%iMB ' "$total_mem"
+printf '(%.2f%%)\n' "$((total_mem / in_use_mem))"
 
+# df -h
+# TODO create grep at school with sda5 or whatever as output
 printf '	#Disk Usage: %i' ""
-printf '/%iGB ' ""
-printf '(%i%%)\n' ""
+printf '/%iGb ' ""
+printf '(%.2f%%)\n' ""
 
-printf '	#CPU Load: %f%%\n' ""
+# Subsequent reads to /proc/stat to get a percentage
+# https://www.linuxhowtos.org/System/procstat.htm
+printf '	#CPU Load: %.2f%%\n' ""
 
-printf '	#Last Boot: %s\n' ""
+printf '	#Last Boot: %s\n' "$(who -b | grep -Po "boot *\K.*")"
 
 printf '	#LVM Use: %s\n' ""
 
